@@ -43,7 +43,7 @@ jobs:
 #      - name: Generate App Version
 #        run: echo APP_VERSION=`git describe --tags --always` >> $GITHUB_ENV
       - name: Set APP Version to latest
-        if: github.event.name == 'schedule'
+#        if: github.event.name == 'schedule'
         run: echo APP_VERSION="latest" >> $GITHUB_ENV
       - name: Build and push
         id: docker_build
