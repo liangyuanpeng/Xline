@@ -37,10 +37,11 @@ jobs:
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Generate App Version
-        run: echo APP_VERSION=`git describe --tags --always` >> $GITHUB_ENV
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+#      - name: Generate App Version
+#        run: echo APP_VERSION=`git describe --tags --always` >> $GITHUB_ENV
       - name: Set APP Version to latest
         if: github.event.name == 'schedule'
         run: echo APP_VERSION="latest" >> $GITHUB_ENV
