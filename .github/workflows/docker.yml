@@ -2,6 +2,8 @@ name: Docker
 
 on:
   workflow_dispatch: {}
+  schedule:
+    - cron: "0 0 * * *"
 
 env:
   CI_RUST_TOOLCHAIN: 1.70.0
@@ -38,6 +40,9 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Generate App Version
         run: echo APP_VERSION=`git describe --tags --always` >> $GITHUB_ENV
+      - name: Set APP Version to latest
+        if: github.event.name == 'schedule'
+        run: echo APP_VERSION="latest" >> $GITHUB_ENV
       - name: Build and push
         id: docker_build
         uses: docker/build-push-action@v2
@@ -45,5 +50,5 @@ jobs:
           push: true
           context: ./scripts
           tags: |
-            datenlord/xline:latest
-            datenlord/xline:${{ env.APP_VERSION }}
+            ghcr.io/liangyuanpeng/xline:latest
+            ghcr.io/liangyuanpeng/xline:${{ env.APP_VERSION }}
