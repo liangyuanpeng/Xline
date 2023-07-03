@@ -20,7 +20,7 @@ jobs:
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
-          username: ${{ github.actor }}
+          username: liangyuanpeng
           password: ${{ secrets.GITHUB_TOKEN }}
       - run: sudo bash ./.github/scripts/install_deps.sh
       - uses: actions-rs/toolchain@v1
