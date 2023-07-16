@@ -40,6 +40,7 @@ jobs:
                       -t ${{ env.REGISTRY_IMAGE }}:latest \
                       -t ${{ env.REGISTRY_IMAGE }}:${{ inputs.app_version }} \
                       $(printf '${{ env.REGISTRY_IMAGE }}@sha256:%s ' *)
+          cosign
 
       - name: Inspect Manifest
         run: |
