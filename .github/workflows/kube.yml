@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+
+env:
+  CI_RUST_TOOLCHAIN: 1.70.0
+
+jobs:
+  e2e:
+    name: e2e
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+        wget https://github.com/kubernetes-sigs/kind/releases/download/v0.20.0/kind-linux-amd64
+        chmod +x kind-linux-amd64
+        mv kind-linux-amd64 /usr/local/bin/kind
+        cat << EOF >> config.yaml
+        kind: Cluster
+        apiVersion: kind.x-k8s.io/v1alpha4
+        nodes:
+        - role: control-plane
+          image: kindest/node:v1.27.0
+          kubeadmConfigPatches:
+            - |
+              kind: ClusterConfiguration
+              etcd:
+                external:
+                  endpoints:
+                  - http://192.168.3.87:2379
+        EOF
+        docker network create kind
+        docker run --network kind -e RUST_LOG=debug  -it -d --name xline  datenlord/xline:latest xline --name node1 --members node1=0.0.0.0:2379 --data-dir /tmp/xline --storage-engine rocksdb
+        kind create cluster --config config.yaml
