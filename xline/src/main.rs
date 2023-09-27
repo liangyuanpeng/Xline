@@ -472,6 +472,12 @@ async fn read_key_pair(
     Some((encoding_key, decoding_key))
 }
 
+fn read_file(path: &str) -> Result<String, io::Error> {
+    let content = fs::read_to_string(path)?;
+    Ok(content)
+}
+
+
 #[tokio::main]
 async fn main() -> Result<()> {
     global::set_text_map_propagator(TraceContextPropagator::new());
@@ -482,6 +488,10 @@ async fn main() -> Result<()> {
             .await
             .map_err(|err| ConfigParseError::IoError(path, err))?;
         toml::from_str(&config_file)?
+        // match read_file(path) {
+        //     Ok(content) => toml::from_str(&config_file)?,
+        //     Err(e) => println!("Error reading file: {}", e),
+        // }
     } else {
         let server_args: ServerArgs = ServerArgs::parse();
         server_args.into()
