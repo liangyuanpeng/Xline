@@ -5,7 +5,7 @@ on:
 
 env:
   CI_RUST_TOOLCHAIN: 1.71.0
-  IMAGE_ID: ghcr.io/xline-kv/xline
+  IMAGE_ID: ghcr.io/liangyuanpeng/xline
 
 jobs:
   push_image:
@@ -74,7 +74,7 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
-          username: xline-kv
+          username: liangyuanpeng
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker Image
