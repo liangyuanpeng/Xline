@@ -8,7 +8,7 @@ on:
         type: string
 
 env:
-  IMAGE_ID: ghcr.io/xline-kv/xline
+  IMAGE_ID: ghcr.io/liangyuanpeng/xline
 
 jobs:
   merge_image:
