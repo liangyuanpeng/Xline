@@ -136,11 +136,13 @@ jobs:
         if: always()
         run: |
           mkdir -p _artifacts
+          docker ps
           kind export logs  --loglevel=debug ./_artifacts/logs
+          ls _artifacts
 
       - name: Upload logs
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: xline-kind-log-${{ matrix.k8s }}-${{ env.JOB_NAME }}-${{ github.run_id }}
           path: ./_artifacts/logs
