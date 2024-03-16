@@ -13,5 +13,5 @@ WORKSPACE=$PWD
 
 sed -i  's/K8SVERSION/'$K8SVERSION'/g' $WORKSPACE/ci/artifact/kind.yaml
 sed -i  's#WORKSPACE#'$WORKSPACE'#g' $WORKSPACE/ci/artifact/kind.yaml
-kind create cluster --config $WORKSPACE/ci/artifact/kind.yaml
+kind create cluster --retain --config $WORKSPACE/ci/artifact/kind.yaml
 kubectl wait node --all --for condition=ready
