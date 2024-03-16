@@ -14,7 +14,7 @@ nodes:
       etcd:
         external:
           endpoints:
-          - http://kind-control-plane:2379
+          - http://kind-control-plane2:2379
 - role: worker
   image: kindest/node:K8SVERSION
 - role: worker
