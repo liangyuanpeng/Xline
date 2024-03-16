@@ -109,3 +109,42 @@ jobs:
       - uses: actions/checkout@v4
       - name: Check Spelling
         uses: crate-ci/typos@master
+
+  e2e:
+    name: e2e_kube
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        k8s:
+          - v1.27.3
+          - v1.28.7
+          - v1.29.2
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create kubernetes cluster with kind
+        env:
+          K8S_VERSION: ${{ matrix.k8s }}
+        run: |
+          ./ci/scripts/kind.sh
+
+      - name: Get cluster status 
+        run: |
+          kubectl run test --image httpd:2
+          kubectl wait --timeout=1m --for=condition=ready pods test
+          kubectl get pods -A -owide
+
+      - name: Export logs
+        if: always()
+        run: |
+          mkdir -p _artifacts
+          docker ps
+          kind export logs  --loglevel=debug ./_artifacts/logs
+          ls _artifacts
+
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: xline-kind-log-${{ matrix.k8s }}-${{ github.run_id }}
+          path: ./_artifacts/logs
