@@ -144,5 +144,5 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: xline-kind-log-${{ matrix.k8s }}-${{ env.JOB_NAME }}-${{ github.run_id }}
+          name: xline-kind-log-${{ matrix.k8s }}-${{ github.run_id }}
           path: ./_artifacts/logs
