@@ -2,11 +2,11 @@ kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
 - role: control-plane
-  image: kindest/node:K8SVERSION
+  image: kindest/node:v1.25.3
   extraMounts:
     - hostPath: /xline/kind
       containerPath: /var/log
-    - hostPath: WORKSPACE/artifact/xline-pod.yaml
+    - hostPath: /home/runner/work/lanactions/lanactions/Xline/ci/artifact/xline-pod.yaml
       containerPath: /etc/kubernetes/manifests/xline.yaml
   kubeadmConfigPatches:
     - |
@@ -14,8 +14,8 @@ nodes:
       etcd:
         external:
           endpoints:
-          - http://172.18.0.2:2379
+          - http://kind-control-plane:2379
 - role: worker
-  image: kindest/node:K8SVERSION
+  image: kindest/node:v1.25.3
 - role: worker
-  image: kindest/node:K8SVERSION
+  image: kindest/node:v1.25.3
