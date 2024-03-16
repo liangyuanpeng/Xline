@@ -123,6 +123,7 @@ jobs:
           - v1.27.3
           - v1.28.7
           - v1.29.2
+          - v1.29.3
     steps:
       - uses: actions/checkout@v4
       - name: work with kubernetes
@@ -130,17 +131,16 @@ jobs:
           K8SVERSION: ${{ matrix.k8s }}
         run: |
           ci/scripts/kind.sh
-      - name: chmod
+
+      - name: Export logs
         if: always()
         run: |
-          sudo chmod -R 777 /xline/kind
-          ls /xline/kind
-          ls /xline/kind/pods
-          du -h --max-depth=1 /xline/kind
-          ls -allh /xline/kind/containers
-      - name: upload kind logs
+          mkdir -p _artifacts
+          kind export logs  --loglevel=debug ./_artifacts/logs
+
+      - name: Upload logs
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
-          name: xline_kind_log_${{ matrix.k8s }}
-          path: /xline/kind/
+          name: xline-kind-log-${{ matrix.k8s }}-${{ env.JOB_NAME }}-${{ github.run_id }}
+          path: ./_artifacts/logs
