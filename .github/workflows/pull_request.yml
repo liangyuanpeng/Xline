@@ -123,7 +123,6 @@ jobs:
           - v1.27.3
           - v1.28.7
           - v1.29.2
-          - v1.29.3
     steps:
       - uses: actions/checkout@v4
       - name: work with kubernetes
