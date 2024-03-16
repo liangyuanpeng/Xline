@@ -129,7 +129,7 @@ jobs:
         env:
           K8SVERSION: ${{ matrix.k8s }}
         run: |
-          ci/scripts/kind.sh
+          ./ci/scripts/kind.sh
 
       - name: Export logs
         if: always()
