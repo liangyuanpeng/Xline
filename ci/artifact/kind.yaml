@@ -16,4 +16,6 @@ nodes:
           endpoints:
           - http://172.18.0.2:2379
 - role: worker
+  image: kindest/node:K8SVERSION
 - role: worker
+  image: kindest/node:K8SVERSION
