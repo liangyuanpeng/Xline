@@ -125,7 +125,7 @@ jobs:
           - v1.29.2
     steps:
       - uses: actions/checkout@v4
-      - name: work with kubernetes
+      - name: Create kubernetes cluster with kind
         env:
           K8SVERSION: ${{ matrix.k8s }}
         run: |
