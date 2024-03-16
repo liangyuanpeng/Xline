@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - e2e_k8s
   pull_request:
     types: [opened, synchronize, reopened]
 
@@ -109,3 +110,37 @@ jobs:
       - uses: actions/checkout@v4
       - name: Check Spelling
         uses: crate-ci/typos@master
+
+  e2e:
+    name: e2e_kube
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        k8s:
+          - v1.25.3
+          - v1.26.0
+          - v1.27.3
+          - v1.28.7
+          - v1.29.2
+    steps:
+      - uses: actions/checkout@v4
+      - name: work with kubernetes
+        env:
+          K8SVERSION: ${{ matrix.k8s }}
+        run: |
+          ci/scripts/kind.sh
+      - name: chmod
+        if: always()
+        run: |
+          sudo chmod -R 777 /xline/kind
+          ls /xline/kind
+          ls /xline/kind/pods
+          du -h --max-depth=1 /xline/kind
+          ls -allh /xline/kind/containers
+      - name: upload kind logs
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: xline_kind_log_${{ matrix.k8s }}
+          path: /xline/kind/
