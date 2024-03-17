@@ -2,8 +2,8 @@ name: PR Checks
 
 on:
   push:
-    branches:
-      - master
+    # branches:
+    #   - master
   pull_request:
     types: [opened, synchronize, reopened]
 
@@ -110,9 +110,51 @@ jobs:
       - name: Check Spelling
         uses: crate-ci/typos@master
 
+  build:
+    name: build 
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Configure sccache
+        uses: actions/github-script@v6
+        with:
+          script: |
+            core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+
+      - name: Build xline image
+        run: |
+          docker run -q --rm -v $(pwd):/xline \
+            -e SCCACHE_GHA_ENABLED=on \
+            -e ACTIONS_CACHE_URL=${ACTIONS_CACHE_URL} \
+            -e ACTIONS_RUNTIME_TOKEN=${ACTIONS_RUNTIME_TOKEN} \
+            ghcr.io/xline-kv/build-env:latest \
+            cargo build --release --bin xline --bin benchmark --bin validation_lock_client
+
+          sudo apt-get install -y --force-yes expect
+          cd scripts
+          cp ../target/release/{xline,benchmark,validation_lock_client} .
+          ldd ./xline
+          ldd ./benchmark
+          cp ../fixtures/{private,public}.pem .
+          docker build . -t ghcr.io/xline-kv/xline:master
+
+          mkdir -p _output
+          docker save -o _output/xline.tar ghcr.io/xline-kv/xline:master
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: xline
+          path: _output/xline.tar
+
   e2e:
     name: e2e_kube
     runs-on: ubuntu-22.04
+    needs:
+      - build
     strategy:
       fail-fast: false
       matrix:
@@ -122,6 +164,14 @@ jobs:
           - v1.29.2
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v2
+        with:
+          name: xline
+
+      - name: build kind node image with xline 
+        run: |
+          docker build -t ci/artifacts/kind-node-xline.Dockerfile ghcr.io/xline-kv/kind-node-xline:${{ matrix.k8s }}-master
+
       - name: Create kubernetes cluster with kind
         env:
           K8S_VERSION: ${{ matrix.k8s }}
