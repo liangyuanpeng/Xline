@@ -144,6 +144,7 @@ jobs:
 
           mkdir -p _output
           docker save -o _output/xline.tar ghcr.io/xline-kv/xline:master
+          ls _output
 
       - uses: actions/upload-artifact@v3
         with:
