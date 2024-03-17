@@ -142,6 +142,8 @@ jobs:
           cp ../fixtures/{private,public}.pem .
           docker build . -t ghcr.io/xline-kv/xline:master
 
+          cd .. 
+          pwd
           mkdir -p _output
           docker save -o _output/xline.tar ghcr.io/xline-kv/xline:master
           ls _output
