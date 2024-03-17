@@ -1,6 +1,6 @@
 ARG K8S_VERSION
 
-FROM kindest/${K8S_VERSION}
+FROM kindest/node:${K8S_VERSION}
 
 RUN mkdir /tmp/kind
 COPY xline.tar /tmp/kind/
