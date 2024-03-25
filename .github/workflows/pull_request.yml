@@ -174,7 +174,7 @@ jobs:
 
       - name: build kind node image with xline
         run: |
-          docker build . -f ci/artifacts/kind-node-xline.Dockerfile -t ghcr.io/xline-kv/kind-node-xline:${{ matrix.k8s }}-master --build-arg K8S_VERSION=${{ matrix.k8s }}
+          docker build . -f ci/artifacts/single-node/kind-node-xline.Dockerfile -t ghcr.io/xline-kv/kind-node-xline:${{ matrix.k8s }}-master --build-arg K8S_VERSION=${{ matrix.k8s }}
 
       - name: Create kubernetes cluster with kind
         env:

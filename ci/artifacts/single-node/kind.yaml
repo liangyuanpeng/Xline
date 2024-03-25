@@ -4,7 +4,7 @@ nodes:
 - role: control-plane
   image: ghcr.io/xline-kv/kind-node-xline:${K8S_VERSION}-master
   extraMounts:
-    - hostPath: ${WORKSPACE}/ci/artifacts/001-xline.yaml
+    - hostPath: ${WORKSPACE}/ci/artifacts/single-node/001-xline.yaml
       containerPath: /etc/kubernetes/manifests/001-xline.yaml
   kubeadmConfigPatches:
     - |
