@@ -12,6 +12,6 @@ spec:
       command:
         - /bin/sh
         - -c
-        - xline --name node1 --members node1=kind-control-plane:2379 --data-dir /tmp/xline --storage-engine rocksdb --client-listen-urls=http://kind-control-plane:2379 --peer-listen-urls=http://kind-control-plane:2380,http://kind-control-plane:2381 --client-advertise-urls=http://kind-control-plane:2379 --peer-advertise-urls=http://kind-control-plane:2380,http://kind-control-plane:2381
+        - xline --name node1 --members node1=kind-control-plane:2379,node2=kind-control-plane:2479,node3=kind-control-plane:2579 --data-dir /tmp/xline --storage-engine rocksdb --client-listen-urls=http://kind-control-plane:2579 --peer-listen-urls=http://kind-control-plane:2580,http://kind-control-plane:2581 --client-advertise-urls=http://kind-control-plane:2579 --peer-advertise-urls=http://kind-control-plane:2580,http://kind-control-plane:2581
   hostNetwork: true
 status: {}
