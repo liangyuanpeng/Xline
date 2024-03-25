@@ -5,7 +5,7 @@ nodes:
   image: ghcr.io/xline-kv/kind-node-xline:${K8S_VERSION}-master
   extraMounts:
     - hostPath: ${WORKSPACE}/ci/artifacts/single-node/001-xline.yaml
-      containerPath: /etc/kubernetes/manifests/001-xline.yaml
+      containerPath: /etc/kubernetes/manifests/x001-xline.yaml
   kubeadmConfigPatches:
     - |
       kind: ClusterConfiguration
