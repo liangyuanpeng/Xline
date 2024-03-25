@@ -6,6 +6,7 @@ set -o pipefail
 
 K8S_VERSION=${K8S_VERSION:-"v1.27.3"}
 KIND_VERSION=${KIND_VERSION:-"0.22.0"}
+XLINE_CLUSTER_TYPE=${XLINE_CLUSTER_TYPE:-"single-node"}
 
 wget -q https://github.com/kubernetes-sigs/kind/releases/download/v$KIND_VERSION/kind-linux-amd64
 chmod +x kind-linux-amd64 && mv kind-linux-amd64 /usr/local/bin/kind
@@ -13,5 +14,5 @@ chmod +x kind-linux-amd64 && mv kind-linux-amd64 /usr/local/bin/kind
 # print the config file
 WORKSPACE=$PWD envsubst
 
-WORKSPACE=$PWD envsubst < ci/artifacts/single-node/kind.yaml | kind create cluster -v7 --retain --wait 4m --config -
+WORKSPACE=$PWD envsubst < ci/artifacts/${XLINE_CLUSTER_TYPE}/kind.yaml | kind create cluster -v7 --retain --wait 4m --config -
 kubectl wait node --all --for condition=ready
