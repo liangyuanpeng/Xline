@@ -36,6 +36,7 @@ jobs:
 
       - name: Generate App Version
         id: generate_app_version
+        # run: echo app_version=`git describe --tags --always` >> $GITHUB_OUTPUT
         run: echo app_version=latest >> $GITHUB_OUTPUT
 
       - name: Set up Docker Buildx
